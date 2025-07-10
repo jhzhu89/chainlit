@@ -8,4 +8,3 @@ export * from './user';
 export * from './thread';
 export * from './history';
 export * from './config';
-export * from './mcp';

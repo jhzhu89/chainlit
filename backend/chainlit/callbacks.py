@@ -2,14 +2,12 @@ import inspect
 from typing import Any, Awaitable, Callable, Dict, List, Optional, Union
 
 from fastapi import Request, Response
-from mcp import ClientSession
 from starlette.datastructures import Headers
 
 from chainlit.action import Action
 from chainlit.config import config
 from chainlit.context import context
 from chainlit.data.base import BaseDataLayer
-from chainlit.mcp import McpConnection
 from chainlit.message import Message
 from chainlit.oauth_providers import get_configured_oauth_providers
 from chainlit.step import Step, step
@@ -345,26 +343,6 @@ def author_rename(
     """
 
     config.code.author_rename = wrap_user_function(func)
-    return func
-
-
-@trace
-def on_mcp_connect(func: Callable[[McpConnection, ClientSession], None]) -> Callable:
-    """
-    Called everytime an MCP is connected
-    """
-
-    config.code.on_mcp_connect = wrap_user_function(func)
-    return func
-
-
-@trace
-def on_mcp_disconnect(func: Callable[[str, ClientSession], None]) -> Callable:
-    """
-    Called everytime an MCP is disconnected
-    """
-
-    config.code.on_mcp_disconnect = wrap_user_function(func)
     return func
 
 

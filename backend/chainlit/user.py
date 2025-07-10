@@ -7,13 +7,8 @@ from pydantic.dataclasses import dataclass
 Provider = Literal[
     "credentials",
     "header",
-    "github",
-    "google",
     "azure-ad",
     "azure-ad-hybrid",
-    "okta",
-    "auth0",
-    "descope",
 ]
 
 

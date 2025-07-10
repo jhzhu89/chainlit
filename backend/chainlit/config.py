@@ -116,16 +116,6 @@ edit_message = true
     # Sample rate of the audio
     sample_rate = 24000
 
-[features.mcp.sse]
-    enabled = true
-
-[features.mcp.stdio]
-    enabled = true
-    # Only the executables in the allow list can be used for MCP stdio server.
-    # Only need the base name of the executable, e.g. "npx", not "/usr/bin/npx".
-    # Please don't comment this line for now, we need it to parse the executable name.
-    allowed_executables = [ "npx", "uvx" ]
-
 [UI]
 # Name of the assistant.
 name = "Assistant"
@@ -249,29 +239,10 @@ class AudioFeature(DataClassJsonMixin):
     enabled: bool = False
 
 
-@dataclass
-class McpSseFeature(DataClassJsonMixin):
-    enabled: bool = True
-
-
-@dataclass
-class McpStdioFeature(DataClassJsonMixin):
-    enabled: bool = True
-    allowed_executables: Optional[list[str]] = None
-
-
-@dataclass
-class McpFeature(DataClassJsonMixin):
-    enabled: bool = False
-    sse: McpSseFeature = Field(default_factory=McpSseFeature)
-    stdio: McpStdioFeature = Field(default_factory=McpStdioFeature)
-
-
 @dataclass()
 class FeaturesSettings(DataClassJsonMixin):
     spontaneous_file_upload: Optional[SpontaneousFileUploadFeature] = None
     audio: Optional[AudioFeature] = Field(default_factory=AudioFeature)
-    mcp: McpFeature = Field(default_factory=McpFeature)
     latex: bool = False
     user_message_autoscroll: bool = True
     unsafe_allow_html: bool = False
@@ -344,8 +315,6 @@ class CodeSettings:
     on_audio_start: Optional[Callable[[], Any]] = None
     on_audio_chunk: Optional[Callable[["InputAudioChunk"], Any]] = None
     on_audio_end: Optional[Callable[[], Any]] = None
-    on_mcp_connect: Optional[Callable] = None
-    on_mcp_disconnect: Optional[Callable] = None
     on_settings_update: Optional[Callable[[Dict[str, Any]], Any]] = None
     set_chat_profiles: Optional[
         Callable[[Optional["User"]], Awaitable[List["ChatProfile"]]]

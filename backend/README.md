@@ -113,6 +113,16 @@ As an open-source initiative in a rapidly evolving domain, we welcome contributi
 
 For detailed information on how to contribute, see [here](/CONTRIBUTING.md).
 
+## Modifications
+
+This version has been modified from the original Chainlit project:
+- Removed non-Azure authentication providers (Google, GitHub, Auth0, etc.)
+- Removed Discord, Slack, Teams integrations  
+- Removed LangChain, LlamaIndex callbacks
+- Simplified to focus on Azure-based workflows
+
+Original work Copyright 2023- The Chainlit team. Licensed under Apache License 2.0.
+
 ## 📃 License
 
 Chainlit is open-source and licensed under the [Apache 2.0](LICENSE) license.

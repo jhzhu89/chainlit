@@ -71,8 +71,6 @@ from .callbacks import (
     on_chat_resume,
     on_chat_start,
     on_logout,
-    on_mcp_connect,
-    on_mcp_disconnect,
     on_message,
     on_settings_update,
     on_stop,
@@ -84,13 +82,6 @@ from .callbacks import (
 )
 
 if TYPE_CHECKING:
-    from chainlit.langchain.callbacks import (
-        AsyncLangchainCallbackHandler,
-        LangchainCallbackHandler,
-    )
-    from chainlit.llama_index.callbacks import LlamaIndexCallbackHandler
-    from chainlit.mistralai import instrument_mistralai
-    from chainlit.openai import instrument_openai
     from chainlit.semantic_kernel import SemanticKernelFilter
 
 
@@ -183,8 +174,6 @@ __all__ = [
     "on_chat_resume",
     "on_chat_start",
     "on_logout",
-    "on_mcp_connect",
-    "on_mcp_disconnect",
     "on_message",
     "on_settings_update",
     "on_stop",

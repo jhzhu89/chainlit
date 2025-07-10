@@ -42,19 +42,6 @@ def get_data_layer():
 
                 bucket_name = os.environ.get("BUCKET_NAME")
 
-                # AWS S3
-                aws_region = os.getenv("APP_AWS_REGION")
-                aws_access_key = os.getenv("APP_AWS_ACCESS_KEY")
-                aws_secret_key = os.getenv("APP_AWS_SECRET_KEY")
-                dev_aws_endpoint = os.getenv("DEV_AWS_ENDPOINT")
-                is_using_s3 = bool(aws_access_key and aws_secret_key and aws_region)
-
-                # Google Cloud Storage
-                gcs_project_id = os.getenv("APP_GCS_PROJECT_ID")
-                gcs_client_email = os.getenv("APP_GCS_CLIENT_EMAIL")
-                gcs_private_key = os.getenv("APP_GCS_PRIVATE_KEY")
-                is_using_gcs = bool(gcs_project_id)
-
                 # Azure Storage
                 azure_storage_account = os.getenv("APP_AZURE_STORAGE_ACCOUNT")
                 azure_storage_key = os.getenv("APP_AZURE_STORAGE_ACCESS_KEY")
@@ -62,30 +49,7 @@ def get_data_layer():
 
                 storage_client = None
 
-                if sum([is_using_s3, is_using_gcs, is_using_azure]) > 1:
-                    warnings.warn(
-                        "Multiple storage configurations detected. Please use only one."
-                    )
-                elif is_using_s3:
-                    from chainlit.data.storage_clients.s3 import S3StorageClient
-
-                    storage_client = S3StorageClient(
-                        bucket=bucket_name,
-                        region_name=aws_region,
-                        aws_access_key_id=aws_access_key,
-                        aws_secret_access_key=aws_secret_key,
-                        endpoint_url=dev_aws_endpoint,
-                    )
-                elif is_using_gcs:
-                    from chainlit.data.storage_clients.gcs import GCSStorageClient
-
-                    storage_client = GCSStorageClient(
-                        project_id=gcs_project_id,
-                        client_email=gcs_client_email,
-                        private_key=gcs_private_key,
-                        bucket_name=bucket_name,
-                    )
-                elif is_using_azure:
+                if is_using_azure:
                     from chainlit.data.storage_clients.azure_blob import (
                         AzureBlobStorageClient,
                     )

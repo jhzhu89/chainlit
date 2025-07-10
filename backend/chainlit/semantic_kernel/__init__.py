@@ -81,11 +81,35 @@ class SemanticKernelFilter(BaseModel):
             return ""
         input_dict = {}
         for key, value in arguments.items():
+            if key == "access_token":
+                continue
+
             if isinstance(value, BaseModel):
                 input_dict[key] = value.model_dump(exclude_none=True, by_alias=True)
             else:
                 input_dict[key] = value
         return input_dict
+
+    def extract_clean_output(self, result_value: Any) -> Any:
+        import json
+
+        text_content = None
+        if (
+            isinstance(result_value, list)
+            and result_value
+            and hasattr(result_value[0], "text")
+        ):
+            text_content = result_value[0].text
+        elif hasattr(result_value, "text"):
+            text_content = result_value.text
+
+        if text_content:
+            try:
+                return json.loads(text_content)
+            except (json.JSONDecodeError, TypeError):
+                return text_content
+
+        return str(result_value)
 
     async def _function_invocation_filter(
         self,
@@ -107,5 +131,5 @@ class SemanticKernelFilter(BaseModel):
             await step.send()
             await next(context)
             if context.result:
-                step.output = context.result.value
+                step.output = self.extract_clean_output(context.result.value)
             await step.update()

@@ -229,28 +229,6 @@ class CallActionRequest(BaseModel):
     sessionId: str
 
 
-class ConnectStdioMCPRequest(BaseModel):
-    sessionId: str
-    clientType: Literal["stdio"]
-    name: str
-    fullCommand: str
-
-
-class ConnectSseMCPRequest(BaseModel):
-    sessionId: str
-    clientType: Literal["sse"]
-    name: str
-    url: str
-
-
-ConnectMCPRequest = Union[ConnectStdioMCPRequest, ConnectSseMCPRequest]
-
-
-class DisconnectMCPRequest(BaseModel):
-    sessionId: str
-    name: str
-
-
 class ElementRequest(BaseModel):
     element: Dict
     sessionId: str
