@@ -548,7 +548,7 @@ class ChainlitDataLayer(BaseDataLayer):
             "name": thread_name,
             "userId": user_id,
             "tags": tags,
-            "metadata": json.dumps(metadata) if metadata is not None else None,
+            "metadata": json.dumps(metadata or {}),
         }
 
         # Remove None values
@@ -559,14 +559,25 @@ class ChainlitDataLayer(BaseDataLayer):
         placeholders = [f"${i + 1}" for i in range(len(data))]
         values = list(data.values())
 
-        update_sets = [f'"{k}" = EXCLUDED."{k}"' for k in data.keys() if k != "id"]
+        update_sets = [
+            f'"{k}" = EXCLUDED."{k}"'
+            for k in data.keys()
+            if k != "id" and not (k == "metadata" and metadata is None)
+        ]
 
-        query = f"""
-            INSERT INTO "Thread" ({", ".join(columns)})
-            VALUES ({", ".join(placeholders)})
-            ON CONFLICT (id) DO UPDATE
-            SET {", ".join(update_sets)};
-        """
+        if update_sets:
+            query = f"""
+                INSERT INTO "Thread" ({", ".join(columns)})
+                VALUES ({", ".join(placeholders)})
+                ON CONFLICT (id) DO UPDATE
+                SET {", ".join(update_sets)};
+            """
+        else:
+            query = f"""
+                INSERT INTO "Thread" ({", ".join(columns)})
+                VALUES ({", ".join(placeholders)})
+                ON CONFLICT (id) DO NOTHING;
+            """
 
         await self.execute_query(query, {str(i + 1): v for i, v in enumerate(values)})
 
