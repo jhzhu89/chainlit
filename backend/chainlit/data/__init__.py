@@ -35,11 +35,6 @@ def get_data_layer():
 
                 trace_event("Init Chainlit official data layer")
 
-                if os.environ.get("LITERAL_API_KEY"):
-                    warnings.warn(
-                        "Both LITERAL_API_KEY and DATABASE_URL specified. Ignoring Literal AI data layer and relying on data layer pointing to DATABASE_URL."
-                    )
-
                 bucket_name = os.environ.get("BUCKET_NAME")
 
                 # Azure Storage
@@ -63,17 +58,6 @@ def get_data_layer():
                 _data_layer = ChainlitDataLayer(
                     database_url=database_url, storage_client=storage_client
                 )
-            elif api_key := os.environ.get("LITERAL_API_KEY"):
-                # When LITERAL_API_KEY is defined, use Literal AI data layer
-                from .literalai import LiteralDataLayer
-
-                trace_event("Init Literal AI data layer")
-
-                # support legacy LITERAL_SERVER variable as fallback
-                server = os.environ.get("LITERAL_API_URL") or os.environ.get(
-                    "LITERAL_SERVER"
-                )
-                _data_layer = LiteralDataLayer(api_key=api_key, server=server)
 
         _data_layer_initialized = True
 
