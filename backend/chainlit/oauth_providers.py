@@ -13,9 +13,6 @@ class OAuthProvider:
     authorize_params: Dict[str, str]
     default_prompt: Optional[str] = None
 
-    def is_configured(self):
-        return all([os.environ.get(env) for env in self.env])
-
     async def get_token(self, code: str, url: str) -> str:
         raise NotImplementedError
 
@@ -49,4 +46,4 @@ def get_oauth_provider(provider: str) -> Optional[OAuthProvider]:
 
 
 def get_configured_oauth_providers():
-    return [p.id for p in providers if p.is_configured()]
+    return [p.id for p in providers]
