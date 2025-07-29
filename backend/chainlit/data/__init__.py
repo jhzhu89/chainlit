@@ -40,7 +40,7 @@ def get_data_layer():
                 # Azure Storage
                 azure_storage_account = os.getenv("APP_AZURE_STORAGE_ACCOUNT")
                 azure_storage_key = os.getenv("APP_AZURE_STORAGE_ACCESS_KEY")
-                is_using_azure = bool(azure_storage_account and azure_storage_key)
+                is_using_azure = bool(azure_storage_account)
 
                 storage_client = None
 

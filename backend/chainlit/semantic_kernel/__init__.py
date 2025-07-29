@@ -81,7 +81,7 @@ class SemanticKernelFilter(BaseModel):
             return ""
         input_dict = {}
         for key, value in arguments.items():
-            if key == "access_token":
+            if key == "user_assertion" or "access_token" in key.lower():
                 continue
 
             if isinstance(value, BaseModel):
